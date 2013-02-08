@@ -118,10 +118,10 @@ action :add do
       notifies :delete, "file[/var/lib/apt/periodic/update-success-stamp]", :immediately
       notifies :run, "execute[apt-get update]", :immediately if new_resource.cache_rebuild
     end
+  
+    raise RuntimeError, "The repository file to create is nil, cannot continue." if @repo_file.nil?
+    new_resource.updated_by_last_action(@repo_file.updated?)
   end
-
-  raise RuntimeError, "The repository file to create is nil, cannot continue." if @repo_file.nil?
-  new_resource.updated_by_last_action(@repo_file.updated?)
 end
 
 action :remove do
